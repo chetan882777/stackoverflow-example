@@ -25,14 +25,14 @@
         android:id="@+id/textView_loginComnand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:text="Login to fully enjoy stackoverflow's features"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/button_login"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/button_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_logoText" />
 
     <Button
@@ -41,11 +41,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:background="@color/colorAccent"
-        android:text="Login to stack overflow"
+        android:text="Login"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_loginComnand" />
+
+    <ImageView
+        android:id="@+id/imageView_logo"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_logoText"
+        app:layout_constraintEnd_toEndOf="@+id/textView_logoText"
+        app:layout_constraintStart_toStartOf="@+id/textView_logoText"
+        tools:src ="@mipmap/logo"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

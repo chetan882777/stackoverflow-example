@@ -1,7 +1,11 @@
 package com.chetan.stackoverflow.ui.auth;
 
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.chetan.stackoverflow.R;
 
@@ -14,19 +18,15 @@ public class AuthActivity extends DaggerAppCompatActivity {
     private static final String TAG = "AuthActivity";
 
     @Inject
-    String testString;
-
-
-    @Inject
-    boolean isAppNull;
+    Drawable logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_auth);
 
+        ImageView imageView = findViewById(R.id.imageView_logo);
 
-            Log.d(TAG, "onCreate: testString: " + testString);
-            Log.d(TAG, "onCreate: is App null: " + isAppNull);
+
     }
 }

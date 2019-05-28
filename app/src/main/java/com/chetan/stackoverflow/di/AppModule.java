@@ -1,6 +1,13 @@
 package com.chetan.stackoverflow.di;
 
 import android.app.Application;
+import android.graphics.drawable.Drawable;
+
+import androidx.core.content.ContextCompat;
+
+import com.chetan.stackoverflow.R;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -8,14 +15,9 @@ import dagger.Provides;
 @Module
 public class AppModule {
 
+    @Singleton
     @Provides
-    static String provideString(){
-        return "this is test String";
-    }
-
-
-    @Provides
-    static boolean getApp(Application application){
-        return application == null;
+    static Drawable provideAppDrawable(Application application) {
+        return ContextCompat.getDrawable(application, R.mipmap.logo);
     }
 }
