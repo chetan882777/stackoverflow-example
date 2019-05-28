@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.bumptech.glide.RequestManager;
 import com.chetan.stackoverflow.R;
 import com.chetan.stackoverflow.model.TokenResponse;
-import com.chetan.stackoverflow.ui.MainActivity;
 import com.chetan.stackoverflow.ui.tags.TagsActivity;
 import com.chetan.stackoverflow.utils.Constants;
 import com.chetan.stackoverflow.viewmodels.ViewModelProviderFactory;

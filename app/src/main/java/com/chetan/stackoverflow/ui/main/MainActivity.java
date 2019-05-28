@@ -1,4 +1,4 @@
-package com.chetan.stackoverflow.ui;
+package com.chetan.stackoverflow.ui.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
