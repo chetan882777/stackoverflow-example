@@ -45,6 +45,9 @@ public class AuthActivity extends DaggerAppCompatActivity {
     @Inject
     ViewModelProviderFactory providerFactory;
 
+    @Inject
+    String tokenUrl;
+
     private AuthViewModel viewModel;
 
     private WebView webView;
@@ -104,10 +107,7 @@ public class AuthActivity extends DaggerAppCompatActivity {
 
         webView.setWebChromeClient(new MyCustomChromeClient());
 
-        webView.loadUrl("https://stackoverflow.com/oauth/dialog" +
-                "?client_id=" + 14910 +
-                "&scope=" + "read_inbox" +
-                "&redirect_uri=" + "https://stackexchange.com/oauth/login_success");
+        webView.loadUrl(tokenUrl);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -115,7 +115,6 @@ public class AuthActivity extends DaggerAppCompatActivity {
                 Log.d(TAG, "onPageStarted: Ok");
             }
 
-            String authCode;
 
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -124,7 +123,7 @@ public class AuthActivity extends DaggerAppCompatActivity {
                 if (url.contains("access_token=")) {
                     String strAccessToken = getAccessToken(url);
 
-                    Log.d("Acess Token", strAccessToken);
+                    Log.d("Access Token", strAccessToken);
                     if (!strAccessToken.equals("0")) {
                         Toast.makeText(getApplicationContext(), "Authenticated Successfully", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "onPageFinished: authenticated");
@@ -146,6 +145,7 @@ public class AuthActivity extends DaggerAppCompatActivity {
             if (i == 2) {
                 //AppConstants.savePreferences(this,"AcessToken",values);
                 Log.d(TAG, "getAccessToken: token:" + values);
+
                 return values;
             }
             i++;

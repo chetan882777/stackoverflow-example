@@ -1,6 +1,7 @@
 package com.chetan.stackoverflow.di;
 
 
+import com.chetan.stackoverflow.di.auth.AuthModule;
 import com.chetan.stackoverflow.di.auth.AuthViewModelsModule;
 import com.chetan.stackoverflow.ui.auth.AuthActivity;
 
@@ -12,7 +13,8 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(
             modules = {
-                    AuthViewModelsModule.class
+                    AuthViewModelsModule.class,
+                    AuthModule.class
             }
     )
     abstract AuthActivity contributeAuthActivity();
