@@ -13,7 +13,7 @@ public abstract class AuthModule {
     static String provideTokenUrl(){
         return Constants.OAUTH_URL +
                 "?client_id=" + Constants.CLIENT_ID +
-                "&scope=" + "read_inbox private_info" +
+                "&scope=" + "read_inbox" +
                 "&redirect_uri=" + Constants.REDIRECT_URI;
     }
 }

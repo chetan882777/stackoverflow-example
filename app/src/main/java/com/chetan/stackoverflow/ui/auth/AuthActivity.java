@@ -29,6 +29,7 @@ import com.bumptech.glide.RequestManager;
 import com.chetan.stackoverflow.R;
 import com.chetan.stackoverflow.model.TokenResponse;
 import com.chetan.stackoverflow.ui.MainActivity;
+import com.chetan.stackoverflow.ui.tags.TagsActivity;
 import com.chetan.stackoverflow.utils.Constants;
 import com.chetan.stackoverflow.viewmodels.ViewModelProviderFactory;
 
@@ -123,7 +124,7 @@ public class AuthActivity extends DaggerAppCompatActivity {
     }
 
     private void onLoginSuccess(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, TagsActivity.class);
         startActivity(intent);
         finish();
     }
