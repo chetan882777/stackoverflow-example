@@ -1,5 +1,6 @@
 package com.chetan.stackoverflow.ui.auth;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -21,11 +22,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.RequestManager;
 import com.chetan.stackoverflow.R;
 import com.chetan.stackoverflow.model.TokenResponse;
+import com.chetan.stackoverflow.ui.MainActivity;
 import com.chetan.stackoverflow.utils.Constants;
 import com.chetan.stackoverflow.viewmodels.ViewModelProviderFactory;
 
@@ -61,6 +64,8 @@ public class AuthActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
+        getSupportActionBar().hide();
+
         Log.d(TAG, "onCreate: auth activity");
 
         ImageView imageView = findViewById(R.id.imageView_logo);
@@ -84,8 +89,44 @@ public class AuthActivity extends DaggerAppCompatActivity {
             }
         });
 
+        subscribeObservers();
+
     }
 
+    private void subscribeObservers(){
+        viewModel.observeAuthState().observe(this, new Observer<AuthResource<TokenResponse>>() {
+            @Override
+            public void onChanged(AuthResource<TokenResponse> tokenResponseAuthResource) {
+                switch (tokenResponseAuthResource.status){
+                    case LOADING:{
+                        break;
+                    }
+                    case AUTHENTICATED:{
+                        Log.d(TAG, "onChanged: LOGIN SUCCESS: " + tokenResponseAuthResource.data.getAccessToken());
+                        onLoginSuccess();
+                        break;
+                    }
+                    case NOT_AUTHENTICATED:{
+                        Log.e(TAG, "onChanged: " + tokenResponseAuthResource.message);
+                        Toast.makeText(AuthActivity.this,
+                                tokenResponseAuthResource.message + "\nDid you enter a number between 0 and 10?",
+                                Toast.LENGTH_SHORT)
+                                .show();
+                        break;
+                    }
+                    case ERROR:{
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+    private void onLoginSuccess(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     private void webview() {
         webView.setWebContentsDebuggingEnabled(true);
@@ -127,6 +168,8 @@ public class AuthActivity extends DaggerAppCompatActivity {
                     if (!accessToken.getAccessToken().equals("0")) {
                         Toast.makeText(getApplicationContext(), "Authenticated Successfully", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "onPageFinished: authenticated");
+
+                        viewModel.authenticateWithToken(accessToken);
 
                     }
                 } else if (url.contains("error=access_denied")) {

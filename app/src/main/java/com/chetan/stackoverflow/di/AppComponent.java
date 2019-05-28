@@ -4,6 +4,7 @@ package com.chetan.stackoverflow.di;
 import android.app.Application;
 
 import com.chetan.stackoverflow.BaseApplication;
+import com.chetan.stackoverflow.SessionManager;
 
 import javax.inject.Singleton;
 
@@ -22,6 +23,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         })
 public interface AppComponent extends AndroidInjector<BaseApplication> {
 
+    SessionManager sessionManager();
 
     @Component.Builder
     interface Builder{

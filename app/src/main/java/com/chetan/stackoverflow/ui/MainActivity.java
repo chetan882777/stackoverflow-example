@@ -1,7 +1,9 @@
-package com.chetan.stackoverflow;
+package com.chetan.stackoverflow.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.chetan.stackoverflow.R;
 
 public class MainActivity extends AppCompatActivity {
 
