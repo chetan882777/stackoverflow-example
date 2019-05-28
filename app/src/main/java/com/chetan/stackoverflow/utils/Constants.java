@@ -6,7 +6,7 @@ public class Constants {
     //Use your own client secret
 
     public final static String REDIRECT_URI = "https://stackexchange.com/oauth/login_success";
-    public final static String OAUTH_URL = "https://stackexchange.com/oauth";
+    public final static String OAUTH_URL = "https://stackexchange.com/oauth/dialog";
 
 
     public final static String DOMAIN = "stackexchange.com";

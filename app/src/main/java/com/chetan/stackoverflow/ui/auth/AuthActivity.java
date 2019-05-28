@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.RequestManager;
 import com.chetan.stackoverflow.R;
+import com.chetan.stackoverflow.model.TokenResponse;
 import com.chetan.stackoverflow.utils.Constants;
 import com.chetan.stackoverflow.viewmodels.ViewModelProviderFactory;
 
@@ -121,12 +122,12 @@ public class AuthActivity extends DaggerAppCompatActivity {
                 super.onPageFinished(view, url);
                 Log.d(TAG, "onPageFinished: url:" + url);
                 if (url.contains("access_token=")) {
-                    String strAccessToken = getAccessToken(url);
+                    TokenResponse accessToken = getAccessToken(url);
 
-                    Log.d("Access Token", strAccessToken);
-                    if (!strAccessToken.equals("0")) {
+                    if (!accessToken.getAccessToken().equals("0")) {
                         Toast.makeText(getApplicationContext(), "Authenticated Successfully", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "onPageFinished: authenticated");
+
                     }
                 } else if (url.contains("error=access_denied")) {
                     Toast.makeText(getApplicationContext(), "Error Occured", Toast.LENGTH_SHORT).show();
@@ -138,19 +139,23 @@ public class AuthActivity extends DaggerAppCompatActivity {
         });
     }
 
-    private String getAccessToken(String url) {
+    private TokenResponse getAccessToken(String url) {
         int i = 0;
         final String[] split = url.split("#|&|=");
+        TokenResponse response = new TokenResponse();
         for (String values : split) {
             if (i == 2) {
                 //AppConstants.savePreferences(this,"AcessToken",values);
                 Log.d(TAG, "getAccessToken: token:" + values);
-
-                return values;
+                response.setAccessToken(values);
+            }
+            if(i == 4){
+                Log.d(TAG, "getAccessToken: expires in :" + values);
+                response.setExpiresIn(Integer.parseInt(values));
             }
             i++;
         }
-        return null;
+        return response;
     }
 
 
