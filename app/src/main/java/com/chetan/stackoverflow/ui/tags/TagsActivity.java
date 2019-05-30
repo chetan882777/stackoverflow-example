@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chetan.stackoverflow.R;
+import com.chetan.stackoverflow.adapter.TagsAdapter;
 import com.chetan.stackoverflow.model.tags.TagItems;
 import com.chetan.stackoverflow.model.tags.Tags;
 import com.chetan.stackoverflow.ui.Resource;
@@ -41,7 +42,7 @@ public class TagsActivity extends DaggerAppCompatActivity {
         setContentView(R.layout.activity_tags);
         getSupportActionBar().hide();
 
-        recyclerView.findViewById(R.id.tags_recyclerView);
+        recyclerView = findViewById(R.id.tags_recyclerView);
 
         Log.d(TAG, "onCreate: Activity started...");
 
@@ -79,8 +80,8 @@ public class TagsActivity extends DaggerAppCompatActivity {
     }
 
     private void setRecyclerView(List<TagItems> tags) {
-
+        TagsAdapter adapter = new TagsAdapter(this, tags);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        recyclerView.setAdapter(adapter);
     }
 }
