@@ -18,16 +18,26 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsViewHolder> {
     private List<TagItems> tags;
     private Context mContext;
 
+    private TagClickListener listener;
+
     public TagsAdapter(Context context, List<TagItems> tagItems){
         tags = tagItems;
         mContext = context;
+    }
+
+    public void setTagClickListener(TagClickListener listener){
+        this.listener = listener;
+    }
+
+    public interface TagClickListener{
+        void onTagClicked(TagItems tag);
     }
 
     @NonNull
     @Override
     public TagsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.tag_list_item, parent, false);
-        return new TagsViewHolder(view);
+        return new TagsViewHolder(view, listener);
     }
 
     @Override

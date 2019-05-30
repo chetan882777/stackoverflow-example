@@ -2,6 +2,7 @@ package com.chetan.stackoverflow.ui.tags;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.Nullable;
@@ -16,6 +17,8 @@ import com.chetan.stackoverflow.model.tags.TagItems;
 import com.chetan.stackoverflow.model.tags.Tags;
 import com.chetan.stackoverflow.ui.Resource;
 import com.chetan.stackoverflow.viewmodels.ViewModelProviderFactory;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 
 import java.util.ArrayList;
@@ -33,8 +36,8 @@ public class TagsActivity extends DaggerAppCompatActivity {
     ViewModelProviderFactory providerFactory;
 
     private RecyclerView recyclerView;
-
     private TagsViewModel viewModel;
+    private ChipGroup chips;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class TagsActivity extends DaggerAppCompatActivity {
         getSupportActionBar().hide();
 
         recyclerView = findViewById(R.id.tags_recyclerView);
+        chips = findViewById(R.id.chipGroup);
 
         Log.d(TAG, "onCreate: Activity started...");
 
@@ -83,5 +87,22 @@ public class TagsActivity extends DaggerAppCompatActivity {
         TagsAdapter adapter = new TagsAdapter(this, tags);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        adapter.setTagClickListener(new TagsAdapter.TagClickListener() {
+            @Override
+            public void onTagClicked(TagItems tag) {
+                final Chip chip = new Chip(TagsActivity.this);
+                chip.setText(tag.getName());
+                chip.setCloseIconVisible(true);
+                chips.addView(chip);
+
+                chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chips.removeView(chip);
+                    }
+                });
+            }
+        });
     }
 }
