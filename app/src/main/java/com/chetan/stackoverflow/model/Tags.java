@@ -3,47 +3,19 @@ package com.chetan.stackoverflow.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Tags {
 
-    @SerializedName("name")
+    @SerializedName("items")
     @Expose
-    private String name;
+    private List<Items> tags;
 
-    @SerializedName("count")
-    @Expose
-    private int count;
-
-    @SerializedName("has_synonyms")
-    @Expose
-    private boolean hasSynonyms;
-
-    public Tags(String name, int count, boolean hasSynonyms) {
-        this.name = name;
-        this.count = count;
-        this.hasSynonyms = hasSynonyms;
+    public List<Items> getTags() {
+        return tags;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public boolean isHasSynonyms() {
-        return hasSynonyms;
-    }
-
-    public void setHasSynonyms(boolean hasSynonyms) {
-        this.hasSynonyms = hasSynonyms;
+    public void setTags(List<Items> tags) {
+        this.tags = tags;
     }
 }

@@ -4,11 +4,16 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.chetan.stackoverflow.R;
+import com.chetan.stackoverflow.model.Items;
+import com.chetan.stackoverflow.model.Tags;
+import com.chetan.stackoverflow.ui.Resource;
 import com.chetan.stackoverflow.viewmodels.ViewModelProviderFactory;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -32,5 +37,33 @@ public class TagsActivity extends DaggerAppCompatActivity {
         Log.d(TAG, "onCreate: Activity started...");
 
         viewModel = ViewModelProviders.of(this, providerFactory).get(TagsViewModel.class);
+
+        subscribeObservers();
+
+    }
+
+    private void subscribeObservers() {
+        viewModel.observePost().observe(this, new Observer<Resource<Tags>>() {
+            @Override
+            public void onChanged(Resource<Tags> listResource) {
+                if (listResource != null) {
+                    switch (listResource.status) {
+                        case ERROR: {
+                            Log.d(TAG, "onChanged: " + listResource.message);
+                            break;
+                        }
+                        case LOADING: {
+                            Log.d(TAG, "onChanged: LOADING...");
+                            break;
+                        }
+                        case SUCCESS: {
+                            Log.d(TAG, "onChanged: " + listResource.data.getTags().size() + " "
+                                    + listResource.data.getTags().get(0).getName());
+                            break;
+                        }
+                    }
+                }
+            }
+        });
     }
 }
