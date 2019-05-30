@@ -2,16 +2,23 @@ package com.chetan.stackoverflow.ui.tags;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chetan.stackoverflow.R;
+import com.chetan.stackoverflow.model.tags.TagItems;
 import com.chetan.stackoverflow.model.tags.Tags;
 import com.chetan.stackoverflow.ui.Resource;
 import com.chetan.stackoverflow.viewmodels.ViewModelProviderFactory;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,6 +31,8 @@ public class TagsActivity extends DaggerAppCompatActivity {
     @Inject
     ViewModelProviderFactory providerFactory;
 
+    private RecyclerView recyclerView;
+
     private TagsViewModel viewModel;
 
     @Override
@@ -31,6 +40,8 @@ public class TagsActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags);
         getSupportActionBar().hide();
+
+        recyclerView.findViewById(R.id.tags_recyclerView);
 
         Log.d(TAG, "onCreate: Activity started...");
 
@@ -57,11 +68,19 @@ public class TagsActivity extends DaggerAppCompatActivity {
                         case SUCCESS: {
                             Log.d(TAG, "onChanged: " + listResource.data.getTags().size() + " "
                                     + listResource.data.getTags().get(0).getName());
+
+                            setRecyclerView(listResource.data.getTags());
                             break;
                         }
                     }
                 }
             }
         });
+    }
+
+    private void setRecyclerView(List<TagItems> tags) {
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
     }
 }
