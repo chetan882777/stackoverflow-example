@@ -1,9 +1,9 @@
-package com.chetan.stackoverflow.model;
+package com.chetan.stackoverflow.model.tags;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Items {
+public class TagItems {
 
     @SerializedName("name")
     @Expose
@@ -17,7 +17,7 @@ public class Items {
     @Expose
     private boolean hasSynonyms;
 
-    public Items(String name, int count, boolean hasSynonyms) {
+    public TagItems(String name, int count, boolean hasSynonyms) {
         this.name = name;
         this.count = count;
         this.hasSynonyms = hasSynonyms;

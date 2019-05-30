@@ -8,12 +8,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.chetan.stackoverflow.R;
-import com.chetan.stackoverflow.model.Items;
-import com.chetan.stackoverflow.model.Tags;
+import com.chetan.stackoverflow.model.tags.Tags;
 import com.chetan.stackoverflow.ui.Resource;
 import com.chetan.stackoverflow.viewmodels.ViewModelProviderFactory;
 
-import java.util.List;
 
 import javax.inject.Inject;
 

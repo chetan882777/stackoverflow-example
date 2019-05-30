@@ -9,6 +9,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chetan.stackoverflow.R;
+import com.chetan.stackoverflow.Repository.StackRepository;
+import com.chetan.stackoverflow.SessionManager;
 import com.chetan.stackoverflow.utils.Constants;
 
 import javax.inject.Singleton;
@@ -50,5 +52,11 @@ public class AppModule {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+    }
+
+    @Singleton
+    @Provides
+    static StackRepository provideStackRepository(SessionManager sessionManager){
+        return new StackRepository(sessionManager);
     }
 }

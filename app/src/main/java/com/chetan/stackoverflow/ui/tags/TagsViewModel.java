@@ -8,14 +8,13 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
-import com.chetan.stackoverflow.model.Items;
-import com.chetan.stackoverflow.model.Tags;
+import com.chetan.stackoverflow.model.tags.TagItems;
+import com.chetan.stackoverflow.model.tags.Tags;
 import com.chetan.stackoverflow.network.tags.TagsApi;
 import com.chetan.stackoverflow.ui.Resource;
 import com.chetan.stackoverflow.utils.Constants;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -37,7 +36,7 @@ public class TagsViewModel extends ViewModel {
         if(tagsApi != null) {
             this.tagsApi = tagsApi;
         }else{
-            Log.d(TAG, "TagsViewModel: Items api null...");
+            Log.d(TAG, "TagsViewModel: TagItems api null...");
         }
 
     }
@@ -63,8 +62,8 @@ public class TagsViewModel extends ViewModel {
                                 @Override
                                 public Tags apply(Throwable throwable) throws Exception {
                                     Log.e(TAG, "apply: " + throwable );
-                                    Items tag = new Items("UNKNOWN" , -1 , false);
-                                    ArrayList<Items> tags = new ArrayList<>();
+                                    TagItems tag = new TagItems("UNKNOWN" , -1 , false);
+                                    ArrayList<TagItems> tags = new ArrayList<>();
                                     Log.d(TAG, "apply: " + throwable.getMessage() + " " + throwable.getLocalizedMessage());
                                     tags.add(tag);
                                     Tags mTag = new Tags();

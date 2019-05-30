@@ -1,4 +1,4 @@
-package com.chetan.stackoverflow.model;
+package com.chetan.stackoverflow.model.tags;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,13 +9,13 @@ public class Tags {
 
     @SerializedName("items")
     @Expose
-    private List<Items> tags;
+    private List<TagItems> tags;
 
-    public List<Items> getTags() {
+    public List<TagItems> getTags() {
         return tags;
     }
 
-    public void setTags(List<Items> tags) {
+    public void setTags(List<TagItems> tags) {
         this.tags = tags;
     }
 }

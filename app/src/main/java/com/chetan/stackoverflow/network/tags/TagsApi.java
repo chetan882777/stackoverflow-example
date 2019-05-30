@@ -1,9 +1,6 @@
 package com.chetan.stackoverflow.network.tags;
 
-import com.chetan.stackoverflow.model.Items;
-import com.chetan.stackoverflow.model.Tags;
-
-import java.util.List;
+import com.chetan.stackoverflow.model.tags.Tags;
 
 import io.reactivex.Flowable;
 import retrofit2.http.GET;
