@@ -1,5 +1,6 @@
 package com.chetan.stackoverflow.ui.tags;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -94,6 +95,11 @@ public class TagsActivity extends DaggerAppCompatActivity {
                 final Chip chip = new Chip(TagsActivity.this);
                 chip.setText(tag.getName());
                 chip.setCloseIconVisible(true);
+                chip.setCloseIcon(getDrawable(R.drawable.close));
+                chip.setChipBackgroundColor(ColorStateList.valueOf(
+                        getResources().getColor(R.color.colorAccent, getTheme())
+                ));
+                chip.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
                 chips.addView(chip);
 
                 chip.setOnCloseIconClickListener(new View.OnClickListener() {
