@@ -121,4 +121,8 @@ public class TagsViewModel extends ViewModel {
             return false;
         }
     }
+
+    void submitSelectedTags() {
+
+    }
 }

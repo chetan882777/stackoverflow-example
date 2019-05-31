@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Stackoverflow</string>
+    <string name="SubmitButtonText">Submit</string>
 </resources>

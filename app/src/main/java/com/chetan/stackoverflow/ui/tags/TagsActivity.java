@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -40,6 +41,8 @@ public class TagsActivity extends DaggerAppCompatActivity {
     private RecyclerView recyclerView;
     private TagsViewModel viewModel;
     private ChipGroup chips;
+    private Button submitButton;
+
     private List<TagItems> mySelectedTags = new ArrayList<>();
 
     @Override
@@ -50,14 +53,20 @@ public class TagsActivity extends DaggerAppCompatActivity {
 
         recyclerView = findViewById(R.id.tags_recyclerView);
         chips = findViewById(R.id.chipGroup);
+        submitButton = findViewById(R.id.button_submit);
 
         Log.d(TAG, "onCreate: Activity started...");
 
         viewModel = ViewModelProviders.of(this, providerFactory).get(TagsViewModel.class);
 
-        subscribeObservers();
-        addTagChip();
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.submitSelectedTags();
+            }
+        });
 
+        subscribeObservers();
     }
 
     private void subscribeObservers() {
@@ -81,6 +90,36 @@ public class TagsActivity extends DaggerAppCompatActivity {
                             setRecyclerView(listResource.data.getTags());
                             break;
                         }
+                    }
+                }
+            }
+        });
+
+        viewModel.getSelectedTags().observe(this, new Observer<List<TagItems>>() {
+            @Override
+            public void onChanged(List<TagItems> tagItems) {
+
+                for (final TagItems tag : tagItems) {
+
+                    final Chip chip = getNewChip();
+
+                    if(!mySelectedTags.contains(tag)) {
+                        chip.setText(tag.getName());
+                        chips.addView(chip);
+
+                        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Boolean isRemoved = viewModel.removeTag(tag);
+                                if (isRemoved) {
+                                    chips.removeView(chip);
+                                    mySelectedTags.remove(tag);
+                                } else {
+                                    Toast.makeText(TagsActivity.this, "Failed to remove tag", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "onTagClicked: Failed to remove tag ...");
+                                }
+                            }
+                        });
                     }
                 }
             }
@@ -114,40 +153,6 @@ public class TagsActivity extends DaggerAppCompatActivity {
         });
     }
 
-
-    private void addTagChip(){
-
-        viewModel.getSelectedTags().observe(this, new Observer<List<TagItems>>() {
-            @Override
-            public void onChanged(List<TagItems> tagItems) {
-
-                for (final TagItems tag : tagItems) {
-
-                    final Chip chip = getNewChip();
-
-                    if(!mySelectedTags.contains(tag)) {
-                        chip.setText(tag.getName());
-                        chips.addView(chip);
-
-                        chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Boolean isRemoved = viewModel.removeTag(tag);
-                                if (isRemoved) {
-                                    chips.removeView(chip);
-                                    mySelectedTags.remove(tag);
-                                } else {
-                                    Toast.makeText(TagsActivity.this, "Failed to remove tag", Toast.LENGTH_SHORT).show();
-                                    Log.d(TAG, "onTagClicked: Failed to remove tag ...");
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        });
-
-    }
 
     private Chip getNewChip() {
         final Chip chip = new Chip(TagsActivity.this);
