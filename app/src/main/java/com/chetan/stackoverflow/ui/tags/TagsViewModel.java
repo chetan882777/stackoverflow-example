@@ -123,6 +123,6 @@ public class TagsViewModel extends ViewModel {
     }
 
     void submitSelectedTags() {
-
+        repository.submitSelectedTags(selectedTags);
     }
 }

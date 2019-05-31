@@ -1,5 +1,6 @@
 package com.chetan.stackoverflow.persistence;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -15,13 +16,16 @@ import java.util.List;
 public interface TagsDao {
 
     @Query("SELECT * FROM tags")
-    List<TagItems> getAllTags();
+    LiveData<List<TagItems>> getAllTags();
 
     @Query("SELECT * FROM tags WHERE name = :name")
-    TagItems getTagByname(String name);
+    LiveData<TagItems> getTagByname(String name);
 
     @Insert
     void insetTags(TagItems ... tags);
+
+    @Insert
+    void insetTags(List<TagItems> tags);
 
     @Insert
     void insetTag(TagItems tags);

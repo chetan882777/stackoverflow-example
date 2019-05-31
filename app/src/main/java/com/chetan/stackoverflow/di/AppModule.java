@@ -60,8 +60,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    static StackRepository provideStackRepository(SessionManager sessionManager){
-        return new StackRepository(sessionManager);
+    static StackRepository provideStackRepository(SessionManager sessionManager, StackDatabase database){
+        return new StackRepository(sessionManager, database);
     }
 
     @Singleton
