@@ -1,5 +1,6 @@
 package com.chetan.stackoverflow.ui.tags;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.chetan.stackoverflow.adapter.TagsAdapter;
 import com.chetan.stackoverflow.model.tags.TagItems;
 import com.chetan.stackoverflow.model.tags.Tags;
 import com.chetan.stackoverflow.ui.Resource;
+import com.chetan.stackoverflow.ui.main.MainActivity;
 import com.chetan.stackoverflow.viewmodels.ViewModelProviderFactory;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -64,7 +66,11 @@ public class TagsActivity extends DaggerAppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.submitSelectedTags();
+                if(mySelectedTags.size() == 4) {
+                    viewModel.submitSelectedTags();
+                }else{
+                    Toast.makeText(TagsActivity.this, "4 tags should be selected", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -126,6 +132,17 @@ public class TagsActivity extends DaggerAppCompatActivity {
                             }
                         });
                     }
+                }
+            }
+        });
+
+        viewModel.getTagsFromDb().observe(this, new Observer<List<TagItems>>() {
+            @Override
+            public void onChanged(List<TagItems> tagItems) {
+                if(tagItems != null){
+                    Log.d(TAG, "onChanged: tags = " + tagItems.size() + " name:" + tagItems.get(0).getName());
+                    Intent intent = new Intent(TagsActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }
             }
         });

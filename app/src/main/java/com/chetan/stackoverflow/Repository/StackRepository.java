@@ -39,6 +39,7 @@ public class StackRepository {
     public void authenticateWithToken(TokenResponse token){
         sessionManager.authenticateWithToken(tokenResponse);
         tokenResponse.postValue(AuthResource.authenticated(token));
+
     }
 
     public LiveData<AuthResource<TokenResponse>> observeAuthState(){
@@ -59,8 +60,6 @@ public class StackRepository {
 
             @Override
             public void onComplete() {
-                Log.d(TAG, "onComplete: tags inserted ... size = " +
-                        database.getTagsDao().getAllTags().getValue().size());
             }
 
             @Override
@@ -68,5 +67,9 @@ public class StackRepository {
                 Log.d(TAG, "onComplete: Failed to insert tags ...");
             }
         });
+    }
+
+    public LiveData<List<TagItems>> getTagsFromDb(){
+        return database.getTagsDao().getAllTags();
     }
 }

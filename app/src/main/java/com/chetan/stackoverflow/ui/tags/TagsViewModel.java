@@ -125,4 +125,8 @@ public class TagsViewModel extends ViewModel {
     void submitSelectedTags() {
         repository.submitSelectedTags(selectedTags);
     }
+
+    LiveData<List<TagItems>> getTagsFromDb(){
+        return repository.getTagsFromDb();
+    }
 }
