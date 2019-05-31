@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
@@ -39,6 +40,7 @@ public class TagsActivity extends DaggerAppCompatActivity {
     private RecyclerView recyclerView;
     private TagsViewModel viewModel;
     private ChipGroup chips;
+    private List<TagItems> mySelectedTags = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class TagsActivity extends DaggerAppCompatActivity {
         viewModel = ViewModelProviders.of(this, providerFactory).get(TagsViewModel.class);
 
         subscribeObservers();
+        addTagChip();
 
     }
 
@@ -91,24 +94,70 @@ public class TagsActivity extends DaggerAppCompatActivity {
 
         adapter.setTagClickListener(new TagsAdapter.TagClickListener() {
             @Override
-            public void onTagClicked(TagItems tag) {
-                final Chip chip = new Chip(TagsActivity.this);
-                chip.setText(tag.getName());
-                chip.setCloseIconVisible(true);
-                chip.setCloseIcon(getDrawable(R.drawable.close));
-                chip.setChipBackgroundColor(ColorStateList.valueOf(
-                        getResources().getColor(R.color.colorAccent, getTheme())
-                ));
-                chip.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
-                chips.addView(chip);
+            public void onTagClicked(final TagItems tag) {
 
-                chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        chips.removeView(chip);
+                if(viewModel.getSelectedTags().getValue().size() < 4 ) {
+                    if (!viewModel.getSelectedTags().getValue().contains(tag)) {
+
+                        viewModel.addTag(tag);
+                        mySelectedTags.add(tag);
+
+                    } else {
+                        Toast.makeText(TagsActivity.this, "Tag already added", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onTagClicked: tag already added ...");
                     }
-                });
+                }else{
+                    Toast.makeText(TagsActivity.this, "Max number of tags selected", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onTagClicked: Max number of tags selected ...");
+                }
             }
         });
     }
+
+
+    private void addTagChip(){
+
+        viewModel.getSelectedTags().observe(this, new Observer<List<TagItems>>() {
+            @Override
+            public void onChanged(List<TagItems> tagItems) {
+
+                for (final TagItems tag : tagItems) {
+
+                    final Chip chip = getNewChip();
+
+                    if(!mySelectedTags.contains(tag)) {
+                        chip.setText(tag.getName());
+                        chips.addView(chip);
+
+                        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Boolean isRemoved = viewModel.removeTag(tag);
+                                if (isRemoved) {
+                                    chips.removeView(chip);
+                                    mySelectedTags.remove(tag);
+                                } else {
+                                    Toast.makeText(TagsActivity.this, "Failed to remove tag", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "onTagClicked: Failed to remove tag ...");
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+    }
+
+    private Chip getNewChip() {
+        final Chip chip = new Chip(TagsActivity.this);
+        chip.setCloseIconVisible(true);
+        chip.setCloseIcon(getDrawable(R.drawable.close));
+        chip.setChipBackgroundColor(ColorStateList.valueOf(
+                getResources().getColor(R.color.colorAccent, getTheme())
+        ));
+        chip.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
+        return chip;
+    }
+
 }

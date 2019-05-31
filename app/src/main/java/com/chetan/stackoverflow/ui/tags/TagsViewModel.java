@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
@@ -15,6 +16,7 @@ import com.chetan.stackoverflow.ui.Resource;
 import com.chetan.stackoverflow.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,9 +30,11 @@ public class TagsViewModel extends ViewModel {
     private TagsApi tagsApi;
 
     private MediatorLiveData<Resource<Tags>> tags;
+    private List<TagItems> selectedTags = new ArrayList<>();
+    private MutableLiveData<List<TagItems>> myTags = new MutableLiveData<>();
 
     @Inject
-    public TagsViewModel(TagsApi tagsApi){
+    TagsViewModel(TagsApi tagsApi){
         Log.d(TAG, "TagsViewModel: view model working...");
 
         if(tagsApi != null) {
@@ -38,11 +42,11 @@ public class TagsViewModel extends ViewModel {
         }else{
             Log.d(TAG, "TagsViewModel: TagItems api null...");
         }
-
+        myTags.setValue(selectedTags);
     }
 
 
-    public LiveData<Resource<Tags>> observePost(){
+    LiveData<Resource<Tags>> observePost(){
         Log.d(TAG, "observePost: observe post");
         if(tags == null){
             tags = new MediatorLiveData<>();
@@ -94,5 +98,27 @@ public class TagsViewModel extends ViewModel {
             });
         }
         return tags;
+    }
+
+    void addTag(TagItems tag){
+        selectedTags.add(tag);
+        myTags.setValue(selectedTags);
+        Log.d(TAG, "addTag: tag = "+ tag.getName() + "..... added to list");
+    }
+
+    MutableLiveData<List<TagItems>> getSelectedTags(){
+        return myTags;
+    }
+
+    Boolean removeTag(TagItems tag){
+        if(selectedTags.contains(tag)){
+            boolean isRemoved = selectedTags.remove(tag);
+            Log.d(TAG, "removeTag: tag removed ...");
+            myTags.setValue(selectedTags);
+            return isRemoved;
+        }else{
+            Log.d(TAG, "removeTag: does not contain tag ...");
+            return false;
+        }
     }
 }

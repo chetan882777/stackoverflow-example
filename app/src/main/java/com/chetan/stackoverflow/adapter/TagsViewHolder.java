@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chetan.stackoverflow.R;
 import com.chetan.stackoverflow.model.tags.TagItems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TagsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private TextView textView;
