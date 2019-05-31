@@ -4,6 +4,7 @@ import android.app.Application;
 import android.graphics.drawable.Drawable;
 
 import androidx.core.content.ContextCompat;
+import androidx.room.Room;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -11,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chetan.stackoverflow.R;
 import com.chetan.stackoverflow.Repository.StackRepository;
 import com.chetan.stackoverflow.SessionManager;
+import com.chetan.stackoverflow.persistence.StackDatabase;
 import com.chetan.stackoverflow.utils.Constants;
 
 import javax.inject.Singleton;
@@ -20,6 +22,8 @@ import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.chetan.stackoverflow.persistence.StackDatabase.DATABASE_NAME;
 
 @Module
 public class AppModule {
@@ -58,5 +62,15 @@ public class AppModule {
     @Provides
     static StackRepository provideStackRepository(SessionManager sessionManager){
         return new StackRepository(sessionManager);
+    }
+
+    @Singleton
+    @Provides
+    static StackDatabase provideStackDatabase(Application application){
+        return Room.databaseBuilder(
+                application,
+                StackDatabase.class,
+                DATABASE_NAME
+        ).build();
     }
 }

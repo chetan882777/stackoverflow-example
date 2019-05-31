@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.chetan.stackoverflow.Repository.StackRepository;
 import com.chetan.stackoverflow.model.tags.TagItems;
 import com.chetan.stackoverflow.model.tags.Tags;
 import com.chetan.stackoverflow.network.tags.TagsApi;
@@ -33,22 +34,21 @@ public class TagsViewModel extends ViewModel {
     private List<TagItems> selectedTags = new ArrayList<>();
     private MutableLiveData<List<TagItems>> myTags = new MutableLiveData<>();
 
+    private StackRepository repository;
+
     @Inject
-    TagsViewModel(TagsApi tagsApi){
+    TagsViewModel(TagsApi tagsApi, StackRepository repository) {
         Log.d(TAG, "TagsViewModel: view model working...");
 
-        if(tagsApi != null) {
-            this.tagsApi = tagsApi;
-        }else{
-            Log.d(TAG, "TagsViewModel: TagItems api null...");
-        }
+        this.tagsApi = tagsApi;
+        this.repository = repository;
         myTags.setValue(selectedTags);
     }
 
 
-    LiveData<Resource<Tags>> observePost(){
+    LiveData<Resource<Tags>> observePost() {
         Log.d(TAG, "observePost: observe post");
-        if(tags == null){
+        if (tags == null) {
             tags = new MediatorLiveData<>();
             tags.setValue(Resource.loading((Tags) null));
 
@@ -65,8 +65,8 @@ public class TagsViewModel extends ViewModel {
                             .onErrorReturn(new Function<Throwable, Tags>() {
                                 @Override
                                 public Tags apply(Throwable throwable) throws Exception {
-                                    Log.e(TAG, "apply: " + throwable );
-                                    TagItems tag = new TagItems("UNKNOWN" , -1 , false);
+                                    Log.e(TAG, "apply: " + throwable);
+                                    TagItems tag = new TagItems("UNKNOWN", -1, false);
                                     ArrayList<TagItems> tags = new ArrayList<>();
                                     Log.d(TAG, "apply: " + throwable.getMessage() + " " + throwable.getLocalizedMessage());
                                     tags.add(tag);
@@ -76,17 +76,17 @@ public class TagsViewModel extends ViewModel {
                                 }
                             })
 
-                           .map(new Function<Tags, Resource<Tags>>() {
-                               @Override
-                               public Resource<Tags> apply(Tags tags) throws Exception {
-                                   if(tags.getTags().size() > 0){
-                                       if(tags.getTags().get(0).getCount() == -1){
-                                           return Resource.error("Some thing went wrong!", null);
-                                       }
-                                   }
-                                   return Resource.success(tags);
-                               }
-                           })
+                            .map(new Function<Tags, Resource<Tags>>() {
+                                @Override
+                                public Resource<Tags> apply(Tags tags) throws Exception {
+                                    if (tags.getTags().size() > 0) {
+                                        if (tags.getTags().get(0).getCount() == -1) {
+                                            return Resource.error("Some thing went wrong!", null);
+                                        }
+                                    }
+                                    return Resource.success(tags);
+                                }
+                            })
                             .subscribeOn(Schedulers.io())
             );
             tags.addSource(source, new Observer<Resource<Tags>>() {
@@ -100,23 +100,23 @@ public class TagsViewModel extends ViewModel {
         return tags;
     }
 
-    void addTag(TagItems tag){
+    void addTag(TagItems tag) {
         selectedTags.add(tag);
         myTags.setValue(selectedTags);
-        Log.d(TAG, "addTag: tag = "+ tag.getName() + "..... added to list");
+        Log.d(TAG, "addTag: tag = " + tag.getName() + "..... added to list");
     }
 
-    MutableLiveData<List<TagItems>> getSelectedTags(){
+    MutableLiveData<List<TagItems>> getSelectedTags() {
         return myTags;
     }
 
-    Boolean removeTag(TagItems tag){
-        if(selectedTags.contains(tag)){
+    Boolean removeTag(TagItems tag) {
+        if (selectedTags.contains(tag)) {
             boolean isRemoved = selectedTags.remove(tag);
             Log.d(TAG, "removeTag: tag removed ...");
             myTags.setValue(selectedTags);
             return isRemoved;
-        }else{
+        } else {
             Log.d(TAG, "removeTag: does not contain tag ...");
             return false;
         }
