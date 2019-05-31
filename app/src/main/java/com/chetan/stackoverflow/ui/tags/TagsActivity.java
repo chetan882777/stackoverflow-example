@@ -55,6 +55,8 @@ public class TagsActivity extends DaggerAppCompatActivity {
         chips = findViewById(R.id.chipGroup);
         submitButton = findViewById(R.id.button_submit);
 
+        submitButton.setVisibility(View.GONE);
+
         Log.d(TAG, "onCreate: Activity started...");
 
         viewModel = ViewModelProviders.of(this, providerFactory).get(TagsViewModel.class);
@@ -87,7 +89,10 @@ public class TagsActivity extends DaggerAppCompatActivity {
                             Log.d(TAG, "onChanged: " + listResource.data.getTags().size() + " "
                                     + listResource.data.getTags().get(0).getName());
 
+                            listResource.data.getTags().add(new TagItems("" , 0 , false));
+
                             setRecyclerView(listResource.data.getTags());
+                            submitButton.setVisibility(View.VISIBLE);
                             break;
                         }
                     }
