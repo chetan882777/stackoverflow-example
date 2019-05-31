@@ -1,5 +1,6 @@
 package com.chetan.stackoverflow.model.tags;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -12,6 +13,7 @@ public class TagItems {
     @PrimaryKey
     @SerializedName("name")
     @Expose
+    @NonNull
     private String name;
 
     @SerializedName("count")

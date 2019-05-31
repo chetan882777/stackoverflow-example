@@ -1,5 +1,7 @@
 package com.chetan.stackoverflow.Repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -12,10 +14,16 @@ import com.chetan.stackoverflow.ui.auth.AuthResource;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
+import io.reactivex.schedulers.Schedulers;
 
 public class StackRepository {
+
+    private static final String TAG = "StackRepository";
 
     private SessionManager sessionManager;
     private StackDatabase database;
@@ -37,11 +45,27 @@ public class StackRepository {
         return sessionManager.getAuthUser();
     }
 
-    public void submitSelectedTags(List<TagItems> selectedTags) {
+    public void submitSelectedTags(final List<TagItems> selectedTags) {
         Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
+                database.getTagsDao().insetTags(selectedTags);
+            }
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
 
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "onComplete: tags inserted ... size = " +
+                        database.getTagsDao().getAllTags().getValue().size());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onComplete: Failed to insert tags ...");
             }
         });
     }
