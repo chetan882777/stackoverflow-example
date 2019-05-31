@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group>
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_setted_wallpapers"
+            android:title="Recent Wallpapers" />
+        <item
+            android:id="@+id/nav_downloaded"
+            android:title="Downloads" />
+        <item
+            android:id="@+id/nav_setting"
+            android:title="Settings" />
+    </group>
+
+</menu>
